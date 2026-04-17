@@ -1,0 +1,11 @@
+# virtual environment
+stage_venv/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# sqlite database
+*.db
