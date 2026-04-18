@@ -9,3 +9,6 @@ __pycache__/
 
 # sqlite database
 *.db
+
+# env file
+.env
