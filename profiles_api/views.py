@@ -10,6 +10,19 @@ from .selectors import get_filtered_profiles
 def error(message, code):
     return Response({"status": "error", "message": message}, status=code)
 
+class HomeView(APIView):
+    def get(self, request):
+         return Response({
+        "status": "success",
+        "message": "Profile API is live",
+        "endpoints": {
+            "create_profile": "/api/profiles",
+            "get_all_profiles": "/api/profiles",
+            "get_single_profile": "/api/profiles/{id}",
+            "delete_profile": "/api/profiles/{id}"
+        }
+    })
+
 class ProfileListCreateView(APIView):
     def post(self, request):
         name = request.data.get("name")
