@@ -7,12 +7,13 @@ class Profile(models.Model):
 
     gender = models.CharField(max_length=10)
     gender_probability = models.FloatField()
-    sample_size = models.IntegerField()
+    # sample_size = models.IntegerField()
 
     age = models.IntegerField()
     age_group = models.CharField(max_length=20)
 
     country_id = models.CharField(max_length=5)
+    country_name = models.CharField(max_length=100, blank=True)
     country_probability = models.FloatField()
 
     created_at = models.DateTimeField(auto_now_add=True)
