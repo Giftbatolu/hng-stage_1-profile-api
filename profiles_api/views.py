@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import pycountry
 
 from .models import Profile
 from .services import fetch_external_data
@@ -53,15 +54,19 @@ class ProfileListCreateView(APIView):
         top_country = get_top_country(data["nation"])
         if not top_country:
             return error("Nationalize returned an invalid response", 502)
+        
+        country_id = top_country["country_id"]
+        country = pycountry.countries.get(alpha_2=country_id)
+        country_name = country.name if country else country_id
 
         profile = Profile.objects.create(
             name=name,
             gender=data["gender"]["gender"],
             gender_probability=data["gender"]["probability"],
-            sample_size=data["gender"]["count"],
             age=age_value,
             age_group=age_group,
-            country_id=top_country["country_id"],
+            country_id=country_id,
+            country_name=country_name,
             country_probability=top_country["probability"]
         )
         
