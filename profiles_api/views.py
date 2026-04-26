@@ -5,8 +5,8 @@ import pycountry
 
 from .models import Profile
 from .services import fetch_external_data
-from .utils import get_age_group, get_top_country, format_profile, format_profile_list
-from .selectors import get_filtered_profiles
+from .utils import get_age_group, get_top_country, format_profile, format_profile_list, apply_sort_and_paginate
+from .filters import ProfileFilter
 
 def error(message, code):
     return Response({"status": "error", "message": message}, status=code)
@@ -76,14 +76,16 @@ class ProfileListCreateView(APIView):
         }, status=201)
 
     def get(self, request):
-        queryset = get_filtered_profiles(request.GET)
+        queryset = ProfileFilter(request.GET, queryset=Profile.objects.all()).qs
 
-        count = queryset.count()
-        data = [format_profile_list(p) for p in queryset]
+        result = apply_sort_and_paginate(request, queryset)
+        data = [format_profile_list(p) for p in result["objects"]]
 
         return Response({
             "status": "success",
-            "count": count,
+            "page": result["page"],
+            "limit": result["limit"],
+            "total": result["total"],
             "data": data
         }, status=200)
 
