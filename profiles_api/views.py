@@ -7,6 +7,7 @@ from .models import Profile
 from .services import fetch_external_data
 from .utils import get_age_group, get_top_country, format_profile, format_profile_list, apply_sort_and_paginate
 from .filters import ProfileFilter
+from .parsers import parse_natural_query
 
 def error(message, code):
     return Response({"status": "error", "message": message}, status=code)
@@ -114,3 +115,28 @@ class ProfileDetailView(APIView):
 
         profile.delete()
         return Response(status=204)
+    
+class NaturalQueryView(APIView):
+    def get(self, request):
+        q = request.GET.get("q")
+        if not q:
+            return error("Missing query parameter 'q'", 400)
+
+        filters = parse_natural_query(q)
+        if filters is None:
+            return error("Could not parse any filters from the query", 422)
+        
+        if filters.get("gender") is None:
+            filters.pop("gender", None)
+
+        queryset = ProfileFilter(filters, queryset=Profile.objects.all()).qs
+        result = apply_sort_and_paginate(request, queryset)
+        data = [format_profile_list(p) for p in result["objects"]]
+
+        return Response({
+            "status": "success",
+            "page": result["page"],
+            "limit": result["limit"],
+            "total": result["total"],
+            "data": data
+        }, status=200)
