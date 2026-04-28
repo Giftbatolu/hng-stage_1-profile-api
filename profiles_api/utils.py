@@ -41,9 +41,13 @@ def format_profile_list(profile):
         "id": str(profile.id),
         "name": profile.name,
         "gender": profile.gender,
+        "gender_probability": profile.gender_probability,
         "age": profile.age,
         "age_group": profile.age_group,
-        "country_id": profile.country_id
+        "country_id": profile.country_id,
+        "country_name": profile.country_name,
+        "country_probability": profile.country_probability,
+        "created_at": profile.created_at.isoformat()
     } 
 
 def apply_sort_and_paginate(request, queryset):
