@@ -3,10 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 import pycountry
 
-from .models import Profile
-from .services import fetch_external_data
+from ..models import Profile
+from ..services import fetch_external_data
 from .utils import get_age_group, get_top_country, format_profile, format_profile_list, apply_sort_and_paginate
-from .filters import ProfileFilter
+from ..filters import ProfileFilter
 from .parsers import parse_natural_query
 
 def error(message, code):
