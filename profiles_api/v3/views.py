@@ -9,6 +9,9 @@ from .utils import get_age_group, get_top_country, format_profile, format_profil
 from ..filters import ProfileFilter
 from .parsers import parse_natural_query
 
+from rest_framework.permissions import IsAuthenticated
+from authentication.permissions import IsAdmin, IsAnalystOrAdmin
+
 def error(message, code):
     return Response({"status": "error", "message": message}, status=code)
 
@@ -26,6 +29,8 @@ class HomeView(APIView):
     })
 
 class ProfileListCreateView(APIView):
+    permission_classes = [IsAuthenticated, IsAnalystOrAdmin]
+    
     def post(self, request):
         name = request.data.get("name")
 
@@ -117,6 +122,8 @@ class ProfileDetailView(APIView):
         return Response(status=204)
     
 class NaturalQueryView(APIView):
+    permission_classes = [IsAuthenticated, IsAnalystOrAdmin]
+
     def get(self, request):
         q = request.GET.get("q")
         if not q:
