@@ -33,6 +33,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# GitHub OAuth settings
+GITHUB_KEY = os.getenv("GITHUB_CLIENT_ID")
+GITHUB_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
+
 # Application definition
 
 INSTALLED_APPS = [
